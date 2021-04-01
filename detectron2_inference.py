@@ -186,7 +186,23 @@ if __name__ == '__main__':
         cocoEval.evaluate()
         cocoEval.accumulate()
         cocoEval.summarize()
+
+    print(cocoEval.stats)
+
+    with NamedTemporaryFile(suffix='.json') as tf:
+             # Due to subsequent needs, first convert detection_res to binary and then write it to the json file
+        content = json.dumps(detection_res).encode(encoding='utf-8')
+        tf.write(content)
+        res_path = tf.name
      
+             # loadRes will generate a new COCO type instance based on coco_gt and return
+        coco_dt = coco_gt.loadRes(res_path)
+     
+        cocoEval = COCOeval(coco_gt, coco_dt, 'bbox')  # use 'bbox' for bbox mAP or 'segm' for instance segmentation mAP
+        cocoEval.evaluate()
+        cocoEval.accumulate()
+        cocoEval.summarize()     
+
     print(cocoEval.stats)
 
     import time
