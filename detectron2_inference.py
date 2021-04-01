@@ -20,11 +20,12 @@ import skimage.io as io
 import pylab,json 
 from tempfile import NamedTemporaryFile
 import pycocotools.mask as mask_util
+import os
+import cv2
 
+if(True):
 
-if(False):
-
-	register_coco_instances("skku_unloading_coco_test", {}, "./test/test.json", "./test/")
+	register_coco_instances("skku_unloading_coco_test", {}, "./skku_unloading_coco_test/trainval.json", "./skku_unloading_coco_test/images/")
 	skku_test_metadata = MetadataCatalog.get("skku_unloading_coco_test")
 	skku_test_dataset_dicts = DatasetCatalog.get("skku_unloading_coco_test")
 
@@ -113,8 +114,8 @@ if(False):
 	    }
 
 	    return segmentations
-
-	# format all outputs into a list of dicts compatible with COCO
+	
+        # format all outputs into a list of dicts compatible with COCO
 
 	#Inspired from
 	# https://www.immersivelimit.com/create-coco-annotations-from-scratch
@@ -132,6 +133,8 @@ if(False):
 	    masks = outputs.pred_masks
 
 	    for i,(bbox, score, class_, mask) in enumerate(zip(bboxes, scores, classes, masks)):
+            print("Mask: ",type(mask))
+            print(mask)
 
 	      annotation = create_sub_mask_annotation(mask, d["image_id"], class_, i, is_crowd, xyxy2xywh(bbox))
 	      #annotations.append(annotation)
