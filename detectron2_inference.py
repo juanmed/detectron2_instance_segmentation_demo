@@ -188,3 +188,14 @@ if __name__ == '__main__':
         cocoEval.summarize()
      
     print(cocoEval.stats)
+
+    import time
+    times = []
+    for i in range(1000):
+        start_time = time.time()
+        outputs = predictor(im)
+        delta = time.time() - start_time
+        times.append(delta)
+    mean_delta = np.array(times).mean()
+    fps = 1 / mean_delta
+    print("Average(sec):{:.2f},fps:{:.2f}".format(mean_delta, fps))
