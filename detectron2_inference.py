@@ -92,7 +92,7 @@ def create_sub_mask_annotation(sub_mask, image_id, category_id, annotation_id, i
 
     # format all outputs into a list of dicts compatible with COCO
 
-if(True):
+if __name__ == '__main__':
 
     register_coco_instances("skku_unloading_coco_test", {}, "./skku_unloading_coco_test/trainval.json", "./skku_unloading_coco_test/images/")
     skku_test_metadata = MetadataCatalog.get("skku_unloading_coco_test")
@@ -135,10 +135,8 @@ if(True):
         masks = outputs.pred_masks
 
         for i,(bbox, score, class_, mask) in enumerate(zip(bboxes, scores, classes, masks)):
-            print("Mask: ",type(mask))
-            print(mask)
 
-            annotation = create_sub_mask_annotation(mask, d["image_id"], class_, i, is_crowd, xyxy2xywh(bbox))
+            annotation = create_sub_mask_annotation(mask.numpy(), d["image_id"], class_, i, is_crowd, xyxy2xywh(bbox))
             #annotations.append(annotation)
 
             detection_res.append({
@@ -150,7 +148,7 @@ if(True):
             })
 
     # json file in coco format, original annotation data
-    anno_file = '/content/skku_unloading_coco_test/trainval.json'
+    anno_file = './skku_unloading_coco_test/trainval.json'
     coco_gt = COCO(anno_file)
      
      # Use GT box as prediction box for calculation, the purpose is to get detection_res
