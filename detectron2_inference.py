@@ -147,6 +147,8 @@ if __name__ == '__main__':
                 'segmentation': annotation
             })
 
+    print(detection_res)
+
     # json file in coco format, original annotation data
     anno_file = './skku_unloading_coco_test/trainval.json'
     coco_gt = COCO(anno_file)
