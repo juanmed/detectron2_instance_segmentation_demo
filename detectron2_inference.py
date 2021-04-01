@@ -68,7 +68,8 @@ def create_sub_mask_annotation(sub_mask, image_id, category_id, annotation_id, i
         poly = poly.simplify(1.0, preserve_topology=False)
         polygons.append(poly)
         segmentation = np.array(poly.exterior.coords).ravel().tolist()
-        segmentations.append(segmentation)
+        if len(segmentation)>4:
+            segmentations.append(segmentation)
 
     # Combine the polygons to calculate the bounding box and area
     multi_poly = MultiPolygon(polygons)
