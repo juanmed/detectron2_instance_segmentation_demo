@@ -214,4 +214,4 @@ if __name__ == '__main__':
         times.append(delta)
     mean_delta = np.array(times).mean()
     fps = 1 / mean_delta
-    print("Average(sec):{:.2f},fps:{:.2f}".format(mean_delta, fps))
+    print("Average(sec):{:.4f},fps:{:.4f}".format(mean_delta, fps))
