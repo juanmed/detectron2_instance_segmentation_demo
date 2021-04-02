@@ -104,13 +104,13 @@ if __name__ == '__main__':
     cfg.DATASETS.TRAIN = ("skku_unloading_coco_train",)
     cfg.DATASETS.TEST = ("skku_unloading_coco_val",)   # no metrics implemented for this dataset
     cfg.DATASETS.VAL = ("skku_unloading_coco_val",)   # no metrics implemented for this dataset
-    cfg.TEST.EVAL_PERIOD = 100
+    cfg.TEST.EVAL_PERIOD = 200
     cfg.DATALOADER.NUM_WORKERS = 2
     cfg.MODEL.WEIGHTS = "detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl"  # initialize from model zoo
-    cfg.SOLVER.IMS_PER_BATCH = 2
+    cfg.SOLVER.IMS_PER_BATCH = 8
     cfg.SOLVER.BASE_LR = 0.02
     cfg.SOLVER.MAX_ITER = 2500   # 300 iterations seems good enough, but you can certainly train longer
-    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset
+    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 256   # faster, and good enough for this toy dataset
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 4  # 3 classes (data, fig, hazelnut)
 
     cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
