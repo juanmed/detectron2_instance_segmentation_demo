@@ -30,6 +30,7 @@ ax1.plot(
 ax1.tick_params(axis='y')
 plt.legend(loc='upper left')
 
+"""
 ax2 = ax1.twinx()
 
 color = 'tab:orange'
@@ -40,4 +41,5 @@ ax2.plot(
 ax2.tick_params(axis='y')
 
 plt.legend(loc='upper right')
+"""
 fig.savefig("graph.jpg")
