@@ -2,6 +2,7 @@ import json
 import matplotlib.pyplot as plt
 
 experiment_folder = './output/'
+mpa_folder = './output/inference/'
 
 def load_json_arr(json_path):
     lines = []
@@ -30,7 +31,10 @@ ax1.plot(
 ax1.tick_params(axis='y')
 plt.legend(loc='upper left')
 
-"""
+experiment_metrics = load_json_arr(mpa_folder + '/coco_instances_results.json')
+
+print(experiment_metrics)
+
 ax2 = ax1.twinx()
 
 color = 'tab:orange'
@@ -41,5 +45,5 @@ ax2.plot(
 ax2.tick_params(axis='y')
 
 plt.legend(loc='upper right')
-"""
+
 fig.savefig("graph.jpg")
