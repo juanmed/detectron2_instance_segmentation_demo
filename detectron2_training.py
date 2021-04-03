@@ -13,6 +13,12 @@ from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog, DatasetCatalog
 from detectron2.data.datasets import register_coco_instances
 
+# import some common libraries
+import matplotlib.pyplot as plt
+import numpy as np
+import cv2
+from google.colab.patches import cv2_imshow
+
 from pycocotools.coco import COCO 
 from pycocotools.cocoeval import COCOeval 
 import numpy as np 
@@ -21,9 +27,7 @@ import pylab,json
 from tempfile import NamedTemporaryFile
 import pycocotools.mask as mask_util
 import os
-import cv2
 
-import numpy as np                                 # (pip install numpy)
 from skimage import measure                        # (pip install scikit-image)
 from shapely.geometry import Polygon, MultiPolygon # (pip install Shapely)
 
@@ -40,13 +44,13 @@ if __name__ == '__main__':
 	skku_val_metadata = MetadataCatalog.get("skku_unloading_coco_val")
 	skku_val_dataset_dicts = DatasetCatalog.get("skku_unloading_coco_val")
 
-	import random
+	#import random
 
-	for d in random.sample(skku_train_dataset_dicts, 3):
-	    img = cv2.imread(d["file_name"])
-	    visualizer = Visualizer(img[:, :, ::-1], metadata=skku_train_metadata, scale=0.35)
-	    vis = visualizer.draw_dataset_dict(d)
-	    cv2_imshow(vis.get_image()[:, :, ::-1])
+	#for d in random.sample(skku_train_dataset_dicts, 3):
+	#    img = cv2.imread(d["file_name"])
+	#    visualizer = Visualizer(img[:, :, ::-1], metadata=skku_train_metadata, scale=0.35)
+	#    vis = visualizer.draw_dataset_dict(d)
+	#    cv2_imshow(vis.get_image()[:, :, ::-1])
 
 	from detectron2.engine import DefaultTrainer
 	from detectron2.config import get_cfg
