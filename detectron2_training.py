@@ -120,5 +120,5 @@ if __name__ == '__main__':
 	trainer.register_hooks([val_loss])
 	# swap the order of PeriodicWriter and ValidationLoss
 	trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
-	trainer.resume_or_load(resume=True)
+	trainer.resume_or_load(resume=False)
 	trainer.train()
