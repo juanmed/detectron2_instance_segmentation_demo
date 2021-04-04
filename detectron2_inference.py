@@ -124,6 +124,7 @@ if __name__ == '__main__':
     #Inspired from
     # https://www.immersivelimit.com/create-coco-annotations-from-scratch
 
+    """
     detection_res = []
     is_crowd = 0
     for k, d in enumerate(skku_test_dataset_dicts):    
@@ -150,7 +151,7 @@ if __name__ == '__main__':
             })
 
     print(detection_res)
-
+    """
 
     from detectron2.utils.visualizer import ColorMode
     import random
@@ -167,7 +168,8 @@ if __name__ == '__main__':
         fig = plt.figure()
         ax = fig.add_subplot(1,1,1)
         ax.imshow(v.get_image()[:, :, ::-1])
-        fig.savefig(d["file_name"])
+        print(d["file_name"])
+        fig.savefig(d["file_name"].split("/")[-1])
 
 
     # json file in coco format, original annotation data
@@ -192,7 +194,7 @@ if __name__ == '__main__':
         if i < 1 :
           print( anno['category_id'], anno['image_id'])
     """
-     
+    """
     with NamedTemporaryFile(suffix='.json') as tf:
              # Due to subsequent needs, first convert detection_res to binary and then write it to the json file
         content = json.dumps(detection_res).encode(encoding='utf-8')
@@ -235,3 +237,4 @@ if __name__ == '__main__':
     mean_delta = np.array(times).mean()
     fps = 1 / mean_delta
     print("Average(sec):{:.4f},fps:{:.4f}".format(mean_delta, fps))
+    """
