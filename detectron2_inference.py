@@ -165,9 +165,9 @@ if __name__ == '__main__':
                        instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels
         )
         v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-        fig = plt.figure()
+        fig = plt.figure(figsize=(20,20))
         ax = fig.add_subplot(1,1,1)
-        ax.imshow(v.get_image()[:, :, ::-1])
+        ax.imshow(v.get_image())
         print(d["file_name"])
         fig.savefig(d["file_name"].split("/")[-1])
 
