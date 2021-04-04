@@ -167,7 +167,7 @@ if __name__ == '__main__':
         fig = plt.figure()
         ax = fig.add_subplot(1,1,1)
         ax.imshow(v.get_image()[:, :, ::-1])
-        fig.imsave(d["file_name"])
+        fig.savefig(d["file_name"])
 
 
     # json file in coco format, original annotation data
