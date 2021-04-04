@@ -165,7 +165,8 @@ if __name__ == '__main__':
         )
         v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
         fig = plt.figure()
-        fig.imshow(v.get_image()[:, :, ::-1])
+        ax = fig.add_subplot(1,1,1)
+        ax.imshow(v.get_image()[:, :, ::-1])
         fig.imsave(d["file_name"])
 
 
