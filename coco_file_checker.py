@@ -1,7 +1,7 @@
 import json
 
 #Find JSON that gives errors
-JSON_LOC="train2.json"
+JSON_LOC="/home/fer/Documents/unloading/unloading_aug/train/train.json"
 
 #Open JSON
 val_json = open(JSON_LOC, "r")
@@ -15,7 +15,7 @@ for i, instance in enumerate(json_object["annotations"]):
     if len(instance["segmentation"][0]) <= 4:
         print("instance number", i, "raises arror:", instance["segmentation"][0])
         idx.append(i)
-
+"""
 print("Replacing... ")
 for i in idx:
 	#Alter object generating the error with something random not causing the error
@@ -29,7 +29,7 @@ for i, instance in enumerate(json_object["annotations"]):
     if len(instance["segmentation"][0]) <= 4:
         print("instance number", i, "raises arror:", instance["segmentation"][0])
         idx.append(i)
-
+"""
 
 print("done")
 #Write back altered JSON
