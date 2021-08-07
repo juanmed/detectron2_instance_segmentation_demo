@@ -52,7 +52,7 @@ for split in splits:
   with open(os.path.join(raw_dir,split,split+"2.json"), 'w') as file:
       json.dump(coco_labels, file)
 
-def main()
+def main(args):
 	register_coco_instances("skku_unloading_coco_train", {}, "./train/train2.json", "./train/")
 	skku_train_metadata = MetadataCatalog.get("skku_unloading_coco_train")
 	skku_train_dataset_dicts = DatasetCatalog.get("skku_unloading_coco_train")
@@ -143,7 +143,7 @@ def main()
 	
 	#cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml")  # initialize from model zoo
 	cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
-	cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512   # faster, and good enough for this toy dataset
+	cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1024   # faster, and good enough for this toy dataset
 	cfg.MODEL.ROI_HEADS.NUM_CLASSES = 4  # 4 classes (box, icebox, pouch, sack)
 	#   ENABLE KEYPOINT REGRESSION
 	cfg.MODEL.KEYPOINT_ON = True
@@ -153,9 +153,11 @@ def main()
 	cfg.MODEL.MASK_ON =  True
 	cfg.MODEL.SEM_SEG_HEAD.LOSS_WEIGHT = 0.5
 	
-	cfg.SOLVER.IMS_PER_BATCH = 2
+	cfg.SOLVER.IMS_PER_BATCH = 8
 	cfg.SOLVER.BASE_LR = 0.02
 	cfg.SOLVER.CHECKPOINT_PERIOD = 5000
+        cfg.SOLVER.STEPS=[]
+        cfg.SOLVER.GAMMA = 1/128  
 	# ********* Learning rate calc: https://github.com/facebookresearch/detectron2/issues/1128#issuecomment-774175041
 	num_gpu = 1
 	bs = (num_gpu * 2)
@@ -171,7 +173,7 @@ def main()
 	# swap the order of PeriodicWriter and ValidationLoss
 	trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
 	trainer.resume_or_load(resume=False)
-	trainer.train()
+	return trainer.train()
 
 if __name__ == '__main__':
     args = default_argument_parser().parse_args()
