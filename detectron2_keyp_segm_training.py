@@ -7,7 +7,7 @@ from detectron2.utils.logger import setup_logger
 setup_logger()
 
 # import some common detectron2 utilities
-from detectron2.engine import DefaultPredictor, launch
+from detectron2.engine import DefaultPredictor, launch, default_argument_parser
 from detectron2.config import get_cfg
 from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog, DatasetCatalog
@@ -52,7 +52,7 @@ for split in splits:
   with open(os.path.join(raw_dir,split,split+"2.json"), 'w') as file:
       json.dump(coco_labels, file)
 
-if __name__ == '__main__':
+def main()
 	register_coco_instances("skku_unloading_coco_train", {}, "./train/train2.json", "./train/")
 	skku_train_metadata = MetadataCatalog.get("skku_unloading_coco_train")
 	skku_train_dataset_dicts = DatasetCatalog.get("skku_unloading_coco_train")
@@ -172,3 +172,15 @@ if __name__ == '__main__':
 	trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
 	trainer.resume_or_load(resume=False)
 	trainer.train()
+
+if __name__ == '__main__':
+    args = default_argument_parser().parse_args()
+    print("Command Line Args:", args)
+    launch(
+        main,
+        args.num_gpus,
+        num_machines=args.num_machines,
+        machine_rank=args.machine_rank,
+        dist_url=args.dist_url,
+        args=(args,),
+    )
