@@ -156,8 +156,8 @@ def main(args):
 	cfg.SOLVER.IMS_PER_BATCH = 8
 	cfg.SOLVER.BASE_LR = 0.02
 	cfg.SOLVER.CHECKPOINT_PERIOD = 5000
-        cfg.SOLVER.STEPS=[]
-        cfg.SOLVER.GAMMA = 1/128  
+	cfg.SOLVER.STEPS=[]
+	cfg.SOLVER.GAMMA = 1/128  
 	# ********* Learning rate calc: https://github.com/facebookresearch/detectron2/issues/1128#issuecomment-774175041
 	num_gpu = 1
 	bs = (num_gpu * 2)
