@@ -7,17 +7,18 @@ from detectron2.utils.logger import setup_logger
 setup_logger()
 
 # import some common detectron2 utilities
-from detectron2.engine import DefaultPredictor
+from detectron2.engine import DefaultPredictor, launch
 from detectron2.config import get_cfg
 from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog, DatasetCatalog
 from detectron2.data.datasets import register_coco_instances
+from detectron2 import model_zoo
 
 # import some common libraries
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
-from google.colab.patches import cv2_imshow
+#from google.colab.patches import cv2_imshow
 
 from pycocotools.coco import COCO 
 from pycocotools.cocoeval import COCOeval 
