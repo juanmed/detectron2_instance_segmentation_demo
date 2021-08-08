@@ -17,7 +17,7 @@ from detectron2.data.datasets import register_coco_instances
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
-from google.colab.patches import cv2_imshow
+#from google.colab.patches import cv2_imshow
 
 from pycocotools.coco import COCO 
 from pycocotools.cocoeval import COCOeval 
@@ -110,7 +110,7 @@ if __name__ == '__main__':
 	cfg.MODEL.WEIGHTS = "detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl"  # initialize from model zoo
 	cfg.SOLVER.IMS_PER_BATCH = 8
 	cfg.SOLVER.BASE_LR = 0.02
-	cfg.SOLVER.MAX_ITER = 3000   # 300 iterations seems good enough, but you can certainly train longer
+	cfg.SOLVER.MAX_ITER = 6000   # 300 iterations seems good enough, but you can certainly train longer
 	cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 256   # faster, and good enough for this toy dataset
 	cfg.MODEL.ROI_HEADS.NUM_CLASSES = 4  # 3 classes (data, fig, hazelnut)
 

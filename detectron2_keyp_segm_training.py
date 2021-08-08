@@ -136,10 +136,10 @@ def main(args):
 	cfg.DATASETS.TEST = ("skku_unloading_coco_test",)   # no metrics implemented for this dataset
 	cfg.DATASETS.VAL = ("skku_unloading_coco_val",)   # no metrics implemented for this dataset
 	
-	cfg.TEST.EVAL_PERIOD = 500
+	cfg.TEST.EVAL_PERIOD = 50000
 	cfg.TEST.KEYPOINT_OKS_SIGMAS = [1.0]
 	
-	cfg.DATALOADER.NUM_WORKERS = 4
+	cfg.DATALOADER.NUM_WORKERS = 6
 	
 	#cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml")  # initialize from model zoo
 	cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
@@ -155,7 +155,7 @@ def main(args):
 	
 	cfg.SOLVER.IMS_PER_BATCH = 8
 	cfg.SOLVER.BASE_LR = 0.02
-	cfg.SOLVER.CHECKPOINT_PERIOD = 5000
+	cfg.SOLVER.CHECKPOINT_PERIOD =  500
 	cfg.SOLVER.STEPS=[]
 	cfg.SOLVER.GAMMA = 1/128  
 	# ********* Learning rate calc: https://github.com/facebookresearch/detectron2/issues/1128#issuecomment-774175041

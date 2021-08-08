@@ -96,7 +96,7 @@ def create_sub_mask_annotation(sub_mask, image_id, category_id, annotation_id, i
 
 if __name__ == '__main__':
 
-    register_coco_instances("skku_unloading_coco_test", {}, "./skku_unloading_coco_test/trainval.json", "./skku_unloading_coco_test/images/")
+    register_coco_instances("skku_unloading_coco_test", {}, "./test/test.json", "./test/")
     skku_test_metadata = MetadataCatalog.get("skku_unloading_coco_test")
     skku_test_dataset_dicts = DatasetCatalog.get("skku_unloading_coco_test")
 
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     #Inspired from
     # https://www.immersivelimit.com/create-coco-annotations-from-scratch
 
-    """
+
     detection_res = []
     is_crowd = 0
     for k, d in enumerate(skku_test_dataset_dicts):    
@@ -151,7 +151,6 @@ if __name__ == '__main__':
             })
 
     print(detection_res)
-    """
 
     from detectron2.utils.visualizer import ColorMode
     import random
@@ -194,7 +193,7 @@ if __name__ == '__main__':
         if i < 1 :
           print( anno['category_id'], anno['image_id'])
     """
-    """
+   
     with NamedTemporaryFile(suffix='.json') as tf:
              # Due to subsequent needs, first convert detection_res to binary and then write it to the json file
         content = json.dumps(detection_res).encode(encoding='utf-8')
@@ -237,4 +236,4 @@ if __name__ == '__main__':
     mean_delta = np.array(times).mean()
     fps = 1 / mean_delta
     print("Average(sec):{:.4f},fps:{:.4f}".format(mean_delta, fps))
-    """
+    
