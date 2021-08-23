@@ -65,13 +65,21 @@ def main(args):
 	skku_val_metadata = MetadataCatalog.get("skku_unloading_coco_val")
 	skku_val_dataset_dicts = DatasetCatalog.get("skku_unloading_coco_val")
 
-	skku_test_metadata.keypoint_names = ['grasp']
+		register_coco_instances("keypoints_train", {}, "./keypoint/train/un_train-6_2.json", "./keypoint/train/")
+		kp_train_metadata = MetadataCatalog.get("keypoints_train")
+		kp_train_dataset_dicts = DatasetCatalog.get("keypoints_train")
+
+	skku_test_metadata.keypoint_names = ['g0','g1','g2','g3','g4']
 	skku_train_metadata.keypoint_names = ['grasp']
 	skku_val_metadata.keypoint_names = ['grasp']
+		kp_train_metadata.keypoint_names = ['g0','g1','g2','g3','g4']
+
 
 	skku_test_metadata.keypoint_flip_map = []
 	skku_train_metadata.keypoint_flip_map = []
 	skku_val_metadata.keypoint_flip_map = []
+		kp_train_metadata.keypoint_flip_map = []
+
 
 	#import random
 
@@ -142,7 +150,7 @@ def main(args):
 	cfg.DATALOADER.NUM_WORKERS = 6
 	
 	#cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml")  # initialize from model zoo
-	cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
+	cfg.MODEL.WEIGHTS = "./output/model_0006499.pth"  #model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
 	cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1024   # faster, and good enough for this toy dataset
 	cfg.MODEL.ROI_HEADS.NUM_CLASSES = 4  # 4 classes (box, icebox, pouch, sack)
 	#   ENABLE KEYPOINT REGRESSION
@@ -172,7 +180,7 @@ def main(args):
 	trainer.register_hooks([val_loss])
 	# swap the order of PeriodicWriter and ValidationLoss
 	trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
-	trainer.resume_or_load(resume=False)
+	trainer.resume_or_load(resume=True)
 	return trainer.train()
 
 if __name__ == '__main__':
