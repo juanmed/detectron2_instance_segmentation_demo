@@ -7,11 +7,12 @@ from detectron2.utils.logger import setup_logger
 setup_logger()
 
 # import some common detectron2 utilities
-from detectron2.engine import DefaultPredictor
+from detectron2.engine import DefaultPredictor, launch, default_argument_parser
 from detectron2.config import get_cfg
 from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog, DatasetCatalog
 from detectron2.data.datasets import register_coco_instances
+from detectron2 import model_zoo
 
 # import some common libraries
 import matplotlib.pyplot as plt
@@ -31,7 +32,7 @@ import os
 from skimage import measure                        # (pip install scikit-image)
 from shapely.geometry import Polygon, MultiPolygon # (pip install Shapely)
 
-if __name__ == '__main__':
+def main(args):
 	register_coco_instances("skku_unloading_coco_train", {}, "./train/train.json", "./train/")
 	skku_train_metadata = MetadataCatalog.get("skku_unloading_coco_train")
 	skku_train_dataset_dicts = DatasetCatalog.get("skku_unloading_coco_train")
@@ -105,20 +106,38 @@ if __name__ == '__main__':
 	cfg.DATASETS.TRAIN = ("skku_unloading_coco_train",)
 	cfg.DATASETS.TEST = ("skku_unloading_coco_val",)   # no metrics implemented for this dataset
 	cfg.DATASETS.VAL = ("skku_unloading_coco_val",)   # no metrics implemented for this dataset
-	cfg.TEST.EVAL_PERIOD = 200
-	cfg.DATALOADER.NUM_WORKERS = 2
-	cfg.MODEL.WEIGHTS = "detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl"  # initialize from model zoo
+	cfg.TEST.EVAL_PERIOD = 50000 # write a huge number to avoid evaluation
+	cfg.DATALOADER.NUM_WORKERS = 6
+	cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml") #"detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl"  # initialize from model zoo
 	cfg.SOLVER.IMS_PER_BATCH = 8
-	cfg.SOLVER.BASE_LR = 0.02
-	cfg.SOLVER.MAX_ITER = 6000   # 300 iterations seems good enough, but you can certainly train longer
-	cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 256   # faster, and good enough for this toy dataset
-	cfg.MODEL.ROI_HEADS.NUM_CLASSES = 4  # 3 classes (data, fig, hazelnut)
+	cfg.SOLVER.CHECKPOINT_PERIOD =  500
+	cfg.SOLVER.MAX_ITER = 9000   # 300 iterations seems good enough, but you can certainly train longer
+	cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1024   # faster, and good enough for this toy dataset
+	cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # 3 classes (data, fig, hazelnut)
+	cfg.SOLVER.STEPS=[]
+	cfg.SOLVER.GAMMA = 1/128 
+
+	num_gpu = 2
+	bs = (num_gpu * 2)
+	cfg.SOLVER.BASE_LR = 0.01 * bs / 128  # pick a good LR
 
 	os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 	trainer = MyTrainer(cfg) #DefaultTrainer(cfg)
-	val_loss = ValidationLoss(cfg)  
-	trainer.register_hooks([val_loss])
+	#val_loss = ValidationLoss(cfg)  
+	#trainer.register_hooks([val_loss])
 	# swap the order of PeriodicWriter and ValidationLoss
-	trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
+	#trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
 	trainer.resume_or_load(resume=False)
 	trainer.train()
+
+if __name__ == '__main__':
+    args = default_argument_parser().parse_args()
+    print("Command Line Args:", args)
+    launch(
+        main,
+        args.num_gpus,
+        num_machines=args.num_machines,
+        machine_rank=args.machine_rank,
+        dist_url=args.dist_url,
+        args=(args,),
+    )
