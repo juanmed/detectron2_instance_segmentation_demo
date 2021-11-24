@@ -171,7 +171,7 @@ def main(args):
 	bs = (num_gpu * 2)
 	cfg.SOLVER.BASE_LR = 0.01 * bs / 128  # pick a good LR
 	# ********
-	cfg.SOLVER.MAX_ITER = 9000   # 300 iterations seems good enough, but you can certainly train longer
+	cfg.SOLVER.MAX_ITER = 12000   # 300 iterations seems good enough, but you can certainly train longer
 
 
 	os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
