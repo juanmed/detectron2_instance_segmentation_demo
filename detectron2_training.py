@@ -33,7 +33,7 @@ from skimage import measure                        # (pip install scikit-image)
 from shapely.geometry import Polygon, MultiPolygon # (pip install Shapely)
 
 def main(args):
-	register_coco_instances("skku_unloading_coco_train", {}, "./train/train.json", "./train/")
+	register_coco_instances("skku_unloading_coco_train", {}, "./pkg_dataset/images/merged.json", "./pkg_dataset/images/")
 	skku_train_metadata = MetadataCatalog.get("skku_unloading_coco_train")
 	skku_train_dataset_dicts = DatasetCatalog.get("skku_unloading_coco_train")
 
@@ -104,14 +104,14 @@ def main(args):
 	cfg = get_cfg()
 	cfg.merge_from_file("./detectron2_repo/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
 	cfg.DATASETS.TRAIN = ("skku_unloading_coco_train",)
-	cfg.DATASETS.TEST = ("skku_unloading_coco_val",)   # no metrics implemented for this dataset
-	cfg.DATASETS.VAL = ("skku_unloading_coco_val",)   # no metrics implemented for this dataset
+	#cfg.DATASETS.TEST = ("skku_unloading_coco_val",)   # no metrics implemented for this dataset
+	#cfg.DATASETS.VAL = ("skku_unloading_coco_val",)   # no metrics implemented for this dataset
 	cfg.TEST.EVAL_PERIOD = 50000 # write a huge number to avoid evaluation
 	cfg.DATALOADER.NUM_WORKERS = 6
 	cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml") #"detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl"  # initialize from model zoo
-	cfg.SOLVER.IMS_PER_BATCH = 8
+	cfg.SOLVER.IMS_PER_BATCH = 32
 	cfg.SOLVER.CHECKPOINT_PERIOD =  500
-	cfg.SOLVER.MAX_ITER = 9000   # 300 iterations seems good enough, but you can certainly train longer
+	cfg.SOLVER.MAX_ITER = 15000   # 300 iterations seems good enough, but you can certainly train longer
 	cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1024   # faster, and good enough for this toy dataset
 	cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # 3 classes (data, fig, hazelnut)
 	cfg.SOLVER.STEPS=[]
